@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace EstructurasDeDatosLineales
 {
-    public class Lista
+    public class Lista<T>
     {
+        public Nodo<T> First;
     }
 }

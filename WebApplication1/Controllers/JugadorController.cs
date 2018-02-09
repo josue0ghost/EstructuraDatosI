@@ -10,6 +10,9 @@ namespace WebApplication1.Controllers
 {
     public class JugadorController : Controller
     {
+        /*public List<Jugador> listado = new List<Jugador> {
+            new Jugador{ id = 1, nombre = ""}
+        };*/
         // GET: Jugador
         public ActionResult Index()
         {
@@ -40,10 +43,10 @@ namespace WebApplication1.Controllers
                     id = Data.Instance.Jugadores.Count + 1,
                     nombre = collection["Nombre"],
                     apellido = collection["Apellido"],
-                    club = collection["Club"],
-                    posicion = collection["Posición"]
-                    //salario_base = collection[ - algo - ],
-                    //compensacion_garantizada = collection[ - algo - ]
+                    posicion = collection["Posicion"],
+                    club = collection["club"],
+                    salario_base = Convert.ToDouble(collection["Salario_Base"]),
+                    compensacion_garantizada = Convert.ToDouble(collection["Compensacion_Garantizada"])
                 });
                 return RedirectToAction("Index");
             }
@@ -66,14 +69,19 @@ namespace WebApplication1.Controllers
             try
             {
                 // TODO: Add update logiche re
-                Jugador ed = new Jugador();
-                ed.nombre = collection["Nombre"];
-                ed.apellido = collection["Apellido"];
-                ed.club = collection["Club"];
-                ed.posicion = collection["Posición"];
-                //  ed.salario_base = collection[ - algo - ];
-                //  ed.compensacion_garantizada = collection[ - algo - ];
-                Data.Instance.Jugadores.Insert(id, ed);
+                /*Jugador ed = Data.Instance.Jugadores.ElementAt(id);
+                collection["Nombre"] = "Willson";
+                collection["Apellido"] = ed.apellido;
+                collection["Posicion"] = ed.posicion;*/
+                Data.Instance.Jugadores.Insert(id, new Jugador
+                {
+                    nombre = collection["Nombre"],
+                    apellido = collection["Apellido"],
+                    posicion = collection["Posicion"],
+                    club = collection["club"],
+                    salario_base = Convert.ToDouble(collection["Salario_Base"]),
+                    compensacion_garantizada = Convert.ToDouble(collection["Compensacion_Garantizada"])
+                });
                 return RedirectToAction("Index");
             }
             catch

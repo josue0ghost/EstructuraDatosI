@@ -10,11 +10,17 @@ namespace WebApplication1.Models
     {
         [Key]
         public int id { get; set; }
+        [Display(Name = "Nombre")]
         public string nombre { get; set; }
+        [Display(Name = "Apellido")]
         public string apellido { get; set; }
-        public string club { get; set; }
+        [Display(Name = "Posicion")]
         public string posicion { get; set; }
-        public decimal salario_base { get; set; }
-        public decimal compensacion_garantizada { get; set; }
+        [Display(Name = "Club")]
+        public string club { get; set; }
+        [Display (Name = "Salario Base")]
+        public double salario_base { get; set; }
+        [Display(Name = "Compensacion Garantizada")]
+        public double compensacion_garantizada { get; set; }
     }
 }
