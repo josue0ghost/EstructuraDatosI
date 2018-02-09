@@ -19,8 +19,10 @@ namespace WebApplication1.Models
         [Display(Name = "Club")]
         public string club { get; set; }
         [Display (Name = "Salario Base")]
+        [Range(1, int.MaxValue, ErrorMessage = "Only positive number allowed")]
         public double salario_base { get; set; }
         [Display(Name = "Compensacion Garantizada")]
+        [Range(1, int.MaxValue, ErrorMessage = "Only positive number allowed")]
         public double compensacion_garantizada { get; set; }
     }
 }

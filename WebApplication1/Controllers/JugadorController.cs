@@ -40,7 +40,7 @@ namespace WebApplication1.Controllers
                 // TODO: Add insert logic here
                 Data.Instance.Jugadores.Add(new Jugador
                 {
-                    id = Data.Instance.Jugadores.Count + 1,
+                    id = Data.Instance.Jugadores.Count,
                     nombre = collection["Nombre"],
                     apellido = collection["Apellido"],
                     posicion = collection["Posicion"],
@@ -55,11 +55,26 @@ namespace WebApplication1.Controllers
                 return View();
             }
         }
+        /*[HttpPost]
+        public ActionResult CreatewithArchive(FormCollection collection)
+        {
+            try
+            {
+                // TODO: Add insert logic here
+                
+                return RedirectToAction("Index");
+            }
+            catch
+            {
+                return View();
+            }
+        }*/
 
         // GET: Jugador/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            var jgd = Data.Instance.Jugadores.Where(x => x.id == id).FirstOrDefault();
+            return View(jgd);
         }
 
         // POST: Jugador/Edit/5
@@ -68,20 +83,13 @@ namespace WebApplication1.Controllers
         {
             try
             {
-                // TODO: Add update logiche re
-                /*Jugador ed = Data.Instance.Jugadores.ElementAt(id);
-                collection["Nombre"] = "Willson";
-                collection["Apellido"] = ed.apellido;
-                collection["Posicion"] = ed.posicion;*/
-                Data.Instance.Jugadores.Insert(id, new Jugador
-                {
-                    nombre = collection["Nombre"],
-                    apellido = collection["Apellido"],
-                    posicion = collection["Posicion"],
-                    club = collection["club"],
-                    salario_base = Convert.ToDouble(collection["Salario_Base"]),
-                    compensacion_garantizada = Convert.ToDouble(collection["Compensacion_Garantizada"])
-                });
+                Data.Instance.Jugadores[id].nombre = collection["Nombre"];
+                Data.Instance.Jugadores[id].apellido = collection["Apellido"];
+                Data.Instance.Jugadores[id].posicion = collection["Posicion"];
+                Data.Instance.Jugadores[id].club = collection["Club"];
+                Data.Instance.Jugadores[id].salario_base = Convert.ToDouble(collection["Salario_Base"]);
+                Data.Instance.Jugadores[id].compensacion_garantizada = Convert.ToDouble(collection["Compensacion_Garantizada"]);
+                
                 return RedirectToAction("Index");
             }
             catch
