@@ -39,8 +39,11 @@ namespace WebApplication1.Controllers
                 {
                     id = Data.Instance.Jugadores.Count + 1,
                     nombre = collection["Nombre"],
-                    apellido = collection["Apellido"]
-
+                    apellido = collection["Apellido"],
+                    club = collection["Club"],
+                    posicion = collection["Posición"]
+                    //salario_base = collection[ - algo - ],
+                    //compensacion_garantizada = collection[ - algo - ]
                 });
                 return RedirectToAction("Index");
             }
@@ -66,6 +69,10 @@ namespace WebApplication1.Controllers
                 Jugador ed = new Jugador();
                 ed.nombre = collection["Nombre"];
                 ed.apellido = collection["Apellido"];
+                ed.club = collection["Club"];
+                ed.posicion = collection["Posición"];
+                //  ed.salario_base = collection[ - algo - ];
+                //  ed.compensacion_garantizada = collection[ - algo - ];
                 Data.Instance.Jugadores.Insert(id, ed);
                 return RedirectToAction("Index");
             }
