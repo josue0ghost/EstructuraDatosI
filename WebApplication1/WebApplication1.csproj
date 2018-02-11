@@ -192,6 +192,7 @@
     <Content Include="Views\Jugador\Index.cshtml" />
     <Content Include="Views\Jugador\Edit.cshtml" />
     <Content Include="Views\Jugador\Create.cshtml" />
+    <Content Include="Views\Jugador\Upload.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using WebApplication1.Clases;
@@ -110,6 +112,56 @@ namespace WebApplication1.Controllers
             {
                 return View();
             }
+        }
+
+        public ActionResult Upload()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Upload(HttpPostedFileBase file)
+        {
+            try
+            {
+                // TODO: Add insert logic here
+                if (!file.FileName.EndsWith(".csv"))
+                    return View();
+
+                return RedirectToAction("Index");
+            }
+            catch
+            {
+                return View();
+            }
+        }
+    }
+
+    class Archivo
+    {
+        public List<string> Lectura(string sRuta)
+        {
+            List<string> lSLineas = new List<string>();
+            StreamReader srLector = new StreamReader(sRuta, Encoding.Default);
+            string sLineas = srLector.ReadLine();
+            while (sLineas != null)
+            {
+                lSLineas.Add(sLineas);
+                sLineas = srLector.ReadLine();
+            }
+            srLector.Close();
+            return lSLineas;
+        }
+
+        private void EscrituraArchivo(string sRuta, List<string> lSDatos)
+        {
+            StreamWriter swEscritor = new StreamWriter(sRuta, false, Encoding.Default);
+            foreach (string slinea in lSDatos)
+            {
+                swEscritor.WriteLine(slinea);
+            }
+            swEscritor.Close();
         }
     }
 }
