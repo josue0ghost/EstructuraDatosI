@@ -214,21 +214,24 @@ namespace WebApplication1.Controllers
 
                 foreach (var item in ReadedLines)
                 {
-                    Jugador jugador = new Jugador();
-                    jugador.club = item[0];
-                    jugador.apellido = item[1];
-                    jugador.nombre = item[2];
-                    jugador.posicion = item[3];
-                    jugador.salario_base = Convert.ToDouble(item[4]);
-                    jugador.compensacion_garantizada = Convert.ToDouble(item[5]);
-
-                    int Index = Data.Instance.Jugadores.IndexOf(jugador);
-
-                    if (Data.Instance.Jugadores.Contains(jugador))
+                    Jugador jugador = new Jugador
                     {
-                        Index = Data.Instance.Jugadores.IndexOf(jugador);
-                        Data.Instance.Jugadores.RemoveAt(Index);
-                    }                   
+                        club = item[0],
+                        apellido = item[1],
+                        nombre = item[2],
+                        posicion = item[3],
+                        salario_base = Convert.ToDouble(item[4]),
+                        compensacion_garantizada = Convert.ToDouble(item[5])
+                    };
+
+                    //int Index = Data.Instance.Jugadores.(jugador);
+                    var jgdr = Data.Instance.Jugadores.Find(jug => jug.nombre==item[2]);
+                    Data.Instance.Jugadores.Remove(jgdr);
+                    //if (Data.Instance.Jugadores.Contains(jugador))
+                    //{
+                    //    Index = Data.Instance.Jugadores.IndexOf(jugador);
+                    //    Data.Instance.Jugadores.RemoveAt(Index);
+                    //}                   
                 }
 
                 return RedirectToAction("Index");
