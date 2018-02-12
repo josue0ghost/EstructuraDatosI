@@ -122,25 +122,61 @@ namespace WebApplication1.Controllers
             }
         }
 
-        public ActionResult Upload()
+        [HttpGet]
+        public ActionResult UploadFile()
         {
             return View();
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Upload(HttpPostedFileBase file)
+        public ActionResult UploadFile(HttpPostedFileBase file)
         {
+            Archivo archivo = new Archivo();
+            List<string[]> ReadedLines = new List<string[]>();
             try
             {
-                // TODO: Add insert logic here
-                if (!file.FileName.EndsWith(".csv"))
+                if (!file.FileName.EndsWith(".csv"))                
                     return View();
+                
+                if (file.ContentLength > 0)
+                {
+                    string fileName = Path.GetFileName(file.FileName);
+                    string path = Path.Combine(Server.MapPath("~/UploadedFiles"), fileName);
+                    file.SaveAs(path);
+
+                    ReadedLines = archivo.Lectura(path);
+                }
+
+                for (int i = 0; i < ReadedLines.Count; i++)
+                    if (ReadedLines[i].Contains("club") ||
+                        ReadedLines[i].Contains("last_name") ||
+                        ReadedLines[i].Contains("first_name") ||
+                        ReadedLines[i].Contains("position") ||
+                        ReadedLines[i].Contains("base_salary") ||
+                        ReadedLines[i].Contains("guaranteed_compensation")
+                        )
+                        ReadedLines.RemoveAt(i);
+
+                foreach (var item in ReadedLines)
+                {
+                    Data.Instance.Jugadores.Add(new Jugador
+                    {
+                        id = Data.Instance.Jugadores.Count,
+                        club = item[0],
+                        apellido = item[1],
+                        nombre = item[2],
+                        posicion = item[3],
+                        salario_base = Convert.ToDouble(item[4]),
+                        compensacion_garantizada = Convert.ToDouble(item[5])
+
+                    });                                
+                }
 
                 return RedirectToAction("Index");
             }
             catch
             {
+                ViewBag.Message = "Error al subir el archivo";
                 return View();
             }
         }
@@ -148,9 +184,11 @@ namespace WebApplication1.Controllers
 
     class Archivo
     {
-        public List<string> Lectura(string sRuta)
+        public List<string[]> Lectura(string sRuta)
         {
+            List<string[]> listItems = new List<string[]>();
             List<string> lSLineas = new List<string>();
+
             StreamReader srLector = new StreamReader(sRuta, Encoding.Default);
             string sLineas = srLector.ReadLine();
             while (sLineas != null)
@@ -159,7 +197,14 @@ namespace WebApplication1.Controllers
                 sLineas = srLector.ReadLine();
             }
             srLector.Close();
-            return lSLineas;
+
+            foreach (var item in lSLineas)
+            {
+                string[] Line = item.Split(',');
+                listItems.Add(Line);
+            }
+            lSLineas.Clear();
+            return listItems;
         }
 
         private void EscrituraArchivo(string sRuta, List<string> lSDatos)
