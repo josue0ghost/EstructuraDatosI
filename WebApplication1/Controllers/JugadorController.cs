@@ -122,12 +122,14 @@ namespace WebApplication1.Controllers
             }
         }
 
+        // GET: Jugador/UploadFile
         [HttpGet]
         public ActionResult UploadFile()
         {
             return View();
         }
 
+        // POST: Jugador/UploadFile
         [HttpPost]
         public ActionResult UploadFile(HttpPostedFileBase file)
         {
@@ -148,11 +150,11 @@ namespace WebApplication1.Controllers
                 }
 
                 for (int i = 0; i < ReadedLines.Count; i++)
-                    if (ReadedLines[i].Contains("club") ||
-                        ReadedLines[i].Contains("last_name") ||
-                        ReadedLines[i].Contains("first_name") ||
-                        ReadedLines[i].Contains("position") ||
-                        ReadedLines[i].Contains("base_salary") ||
+                    if (ReadedLines[i].Contains("club") &&
+                        ReadedLines[i].Contains("last_name") &&
+                        ReadedLines[i].Contains("first_name") &&
+                        ReadedLines[i].Contains("position") &&
+                        ReadedLines[i].Contains("base_salary") &&
                         ReadedLines[i].Contains("guaranteed_compensation")
                         )
                         ReadedLines.RemoveAt(i);
@@ -170,6 +172,71 @@ namespace WebApplication1.Controllers
                         compensacion_garantizada = Convert.ToDouble(item[5])
 
                     });                                
+                }
+
+                return RedirectToAction("Index");
+            }
+            catch
+            {
+                ViewBag.Message = "Error al subir el archivo";
+                return View();
+            }
+        }
+
+        // GET: Jugador/UploadFileDelete
+        [HttpGet]
+        public ActionResult UploadFileDelete()
+        {
+            return View();
+        }
+
+        // POST: Jugador/UploadFileDelete
+        [HttpPost]
+        public ActionResult UploadFileDelete(HttpPostedFileBase file)
+        {
+            Archivo archivo = new Archivo();
+            List<string[]> ReadedLines = new List<string[]>();
+            try
+            {
+                if (!file.FileName.EndsWith(".csv"))
+                    return View();
+
+                if (file.ContentLength > 0)
+                {
+                    string fileName = Path.GetFileName(file.FileName);
+                    string path = Path.Combine(Server.MapPath("~/UploadedFiles"), fileName);
+                    file.SaveAs(path);
+
+                    ReadedLines = archivo.Lectura(path);
+                }
+
+                for (int i = 0; i < ReadedLines.Count; i++)
+                    if (ReadedLines[i].Contains("club") &&
+                        ReadedLines[i].Contains("last_name") &&
+                        ReadedLines[i].Contains("first_name") &&
+                        ReadedLines[i].Contains("position") &&
+                        ReadedLines[i].Contains("base_salary") &&
+                        ReadedLines[i].Contains("guaranteed_compensation")
+                        )
+                        ReadedLines.RemoveAt(i);
+
+                foreach (var item in ReadedLines)
+                {
+                    Jugador jugador = new Jugador();
+                    jugador.club = item[0];
+                    jugador.apellido = item[1];
+                    jugador.nombre = item[2];
+                    jugador.posicion = item[3];
+                    jugador.salario_base = Convert.ToDouble(item[4]);
+                    jugador.compensacion_garantizada = Convert.ToDouble(item[5]);
+
+                    int Index = Data.Instance.Jugadores.IndexOf(jugador);
+
+                    if (Data.Instance.Jugadores.Contains(jugador))
+                    {
+                        Index = Data.Instance.Jugadores.IndexOf(jugador);
+                        Data.Instance.Jugadores.RemoveAt(Index);
+                    }                   
                 }
 
                 return RedirectToAction("Index");

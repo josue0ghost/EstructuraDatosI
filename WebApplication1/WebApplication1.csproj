@@ -190,13 +190,14 @@
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Jugador\Index.cshtml" />
-    <Content Include="Views\Jugador\Create.cshtml" />
     <Content Include="Views\Jugador\Edit.cshtml" />
-    <Content Include="Views\Jugador\Details.cshtml" />
-    <Content Include="Views\Jugador\Delete.cshtml" />
+    <Content Include="Views\Jugador\Create.cshtml" />
+    <Content Include="Views\Jugador\UploadFile.cshtml" />
+    <Content Include="Views\Jugador\UploadFileDelete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="UploadedFiles\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

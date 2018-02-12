@@ -8,9 +8,13 @@
 
 <p>
     @Html.ActionLink("Create New", "Create")
+    @Html.Label(" or ")
+    @Html.ActionLink("Upload a File", "UploadFile", "Jugador")
 </p>
 <p>
-    @Html.ActionLink("Upload File", "UploadFile", "Jugador")
+    @Html.ActionLink("Delete Element", "Delete")
+    @Html.Label(" or ")
+    @Html.ActionLink("Upload a File", "UploadFileDelete", "Jugador")
 </p>
 
 <table class="table">
