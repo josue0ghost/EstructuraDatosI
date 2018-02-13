@@ -1,0 +1,27 @@
+﻿@{
+    ViewBag.Title = "Home";
+}
+
+<h2>Home</h2>
+
+<div class="jumbotron">
+    <h1>MLS DATA MANAGER</h1>
+    <p class="lead">Major League Soccer data manager is here! Create your players list by manual creation or by .csv files.</p>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <h2>Artesanal-List</h2>
+        <p>
+            Do you want to use our Artesanal-List?
+        </p>
+        <p>@Html.ActionLink("Go", "Index", "Jugador")</p>
+        
+        
+    </div>
+    <div class="col-md-4">
+        <h2>C# List</h2>
+        <p>Do you want to use a C# List?</p>
+        <p>@Html.ActionLink("Go", "Index", "Jugador")</p>
+    </div>
+</div>

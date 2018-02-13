@@ -12,9 +12,17 @@ namespace WebApplication1.Controllers
 {
     public class JugadorController : Controller
     {
+        Archivo archivo = new Archivo();
+        Methods method = new Methods();
+
         /*public List<Jugador> listado = new List<Jugador> {
             new Jugador{ id = 1, nombre = ""}
         };*/
+        public ActionResult Home()
+        {
+            return View();
+        }
+
         // GET: Jugador
         public ActionResult Index()
         {
@@ -133,13 +141,13 @@ namespace WebApplication1.Controllers
         [HttpPost]
         public ActionResult UploadFile(HttpPostedFileBase file)
         {
-            Archivo archivo = new Archivo();
+            
             List<string[]> ReadedLines = new List<string[]>();
             try
             {
                 if (!file.FileName.EndsWith(".csv"))                
                     return View();
-                
+
                 if (file.ContentLength > 0)
                 {
                     string fileName = Path.GetFileName(file.FileName);
@@ -149,31 +157,9 @@ namespace WebApplication1.Controllers
                     ReadedLines = archivo.Lectura(path);
                 }
 
-                for (int i = 0; i < ReadedLines.Count; i++)
-                    if (ReadedLines[i].Contains("club") &&
-                        ReadedLines[i].Contains("last_name") &&
-                        ReadedLines[i].Contains("first_name") &&
-                        ReadedLines[i].Contains("position") &&
-                        ReadedLines[i].Contains("base_salary") &&
-                        ReadedLines[i].Contains("guaranteed_compensation")
-                        )
-                        ReadedLines.RemoveAt(i);
-
-                foreach (var item in ReadedLines)
-                {
-                    Data.Instance.Jugadores.Add(new Jugador
-                    {
-                        id = Data.Instance.Jugadores.Count,
-                        club = item[0],
-                        apellido = item[1],
-                        nombre = item[2],
-                        posicion = item[3],
-                        salario_base = Convert.ToDouble(item[4]),
-                        compensacion_garantizada = Convert.ToDouble(item[5])
-
-                    });                                
-                }
-
+                method.DeleteInnecesaryLine(ReadedLines);
+                method.AddToList(ReadedLines);
+             
                 return RedirectToAction("Index");
             }
             catch
@@ -194,7 +180,6 @@ namespace WebApplication1.Controllers
         [HttpPost]
         public ActionResult UploadFileDelete(HttpPostedFileBase file)
         {
-            Archivo archivo = new Archivo();
             List<string[]> ReadedLines = new List<string[]>();
             try
             {
@@ -210,25 +195,8 @@ namespace WebApplication1.Controllers
                     ReadedLines = archivo.Lectura(path);
                 }
 
-                for (int i = 0; i < ReadedLines.Count; i++)
-                    if (ReadedLines[i].Contains("club") &&
-                        ReadedLines[i].Contains("last_name") &&
-                        ReadedLines[i].Contains("first_name") &&
-                        ReadedLines[i].Contains("position") &&
-                        ReadedLines[i].Contains("base_salary") &&
-                        ReadedLines[i].Contains("guaranteed_compensation")
-                        )
-                        ReadedLines.RemoveAt(i);
-
-                foreach (var item in ReadedLines)
-                {
-
-                    var jgdr = Data.Instance.Jugadores.Find(jug => jug.club == item[0] && jug.apellido == item[1] && 
-                                                            jug.nombre==item[2] && jug.posicion==item[3] &&
-                                                            jug.salario_base.Equals(Convert.ToDouble(item[4])) && 
-                                                            jug.compensacion_garantizada.Equals(Convert.ToDouble(item[5])));
-                    Data.Instance.Jugadores.Remove(jgdr);                    
-                }
+                method.DeleteInnecesaryLine(ReadedLines);
+                method.DeleteFromList(ReadedLines);                
 
                 return RedirectToAction("Index");
             }
@@ -236,6 +204,51 @@ namespace WebApplication1.Controllers
             {
                 ViewBag.Message = "Error al subir el archivo";
                 return View();
+            }
+        }
+    }
+
+    class Methods : Controller
+    {
+        public void DeleteInnecesaryLine(List<string[]> ReadedLines)
+        {
+            for (int i = 0; i < ReadedLines.Count; i++)
+                if (ReadedLines[i].Contains("club") &&
+                    ReadedLines[i].Contains("last_name") &&
+                    ReadedLines[i].Contains("first_name") &&
+                    ReadedLines[i].Contains("position") &&
+                    ReadedLines[i].Contains("base_salary") &&
+                    ReadedLines[i].Contains("guaranteed_compensation")
+                    )
+                    ReadedLines.RemoveAt(i);
+        }
+
+        public void AddToList(List<string[]> ReadedLines)
+        {
+            foreach (var item in ReadedLines)
+            {
+                Data.Instance.Jugadores.Add(new Jugador
+                {
+                    id = Data.Instance.Jugadores.Count,
+                    club = item[0],
+                    apellido = item[1],
+                    nombre = item[2],
+                    posicion = item[3],
+                    salario_base = Convert.ToDouble(item[4]),
+                    compensacion_garantizada = Convert.ToDouble(item[5])
+                });
+            }
+        }
+
+        public void DeleteFromList(List<string[]> ReadedLines)
+        {
+            foreach (var item in ReadedLines)
+            {
+                var jgdr = Data.Instance.Jugadores.Find(jug => jug.club == item[0] && jug.apellido == item[1] &&
+                                                        jug.nombre == item[2] && jug.posicion == item[3] &&
+                                                        jug.salario_base.Equals(Convert.ToDouble(item[4])) &&
+                                                        jug.compensacion_garantizada.Equals(Convert.ToDouble(item[5])));
+                Data.Instance.Jugadores.Remove(jgdr);
             }
         }
     }
