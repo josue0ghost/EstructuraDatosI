@@ -22,7 +22,8 @@ namespace WebApplication1.Controllers
         // GET: Jugador/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+            var jgd = Data.Instance.Jugadores.Where(x => x.id == id).FirstOrDefault();
+            return View(jgd);
         }
 
         // GET: Jugador/Create
@@ -89,7 +90,7 @@ namespace WebApplication1.Controllers
                 Data.Instance.Jugadores[id].club = collection["Club"];
                 Data.Instance.Jugadores[id].salario_base = Convert.ToDouble(collection["Salario_Base"]);
                 Data.Instance.Jugadores[id].compensacion_garantizada = Convert.ToDouble(collection["Compensacion_Garantizada"]);
-                
+
                 return RedirectToAction("Index");
             }
             catch
@@ -101,7 +102,8 @@ namespace WebApplication1.Controllers
         // GET: Jugador/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            var jgd = Data.Instance.Jugadores.Where(x => x.id == id).FirstOrDefault();
+            return View(jgd);
         }
 
         // POST: Jugador/Delete/5
@@ -111,8 +113,100 @@ namespace WebApplication1.Controllers
             try
             {
                 // TODO: Add delete logic here
-
+                Data.Instance.Jugadores.RemoveAt(id);
                 return RedirectToAction("Index");
+            }
+            catch
+            {
+                return View();
+            }
+        }
+        //public static List<Jugador> temp = Data.Instance.Jugadores;
+        public ActionResult Search()
+        {
+            return View(Data.Instance.Jugadores);
+        }
+
+        [HttpPost]
+        public ActionResult Search(FormCollection collection, string nameButton)
+        {
+            try
+            {
+                // TODO: Add delete logic here
+                var nombreF = collection["nombrefilter"];
+                var posicionF = collection["posicionfilter"];
+                var apellidoF = collection["apellidofilter"];
+                var salarioF = collection["salariofilter"];
+                switch (nameButton)
+                {
+                    case "Buscar por Nombre":
+                        if (nombreF != "")
+                        {
+                            return View(Data.Instance.Jugadores.Where(x => x.nombre == nombreF));
+                        }
+                        if(collection["nombrefilter"].Equals(""))
+                        {
+                            ViewBag.Message = string.Format("No se ha ingresado un parametro de busqueda");
+                            return View(Data.Instance.Jugadores);
+                        }
+                        break;
+                    case "Buscar por Apellido":
+                        if (apellidoF != "")
+                        {
+                            return View(Data.Instance.Jugadores.Where(a => a.apellido == apellidoF));
+                        }
+                        if (collection["apellidofilter"].Equals(""))
+                        {
+                            ViewBag.Message = string.Format("No se ha ingresado un parametro de busqueda");
+                            return View(Data.Instance.Jugadores);
+                        }
+                        break;
+                    case "Buscar por Posicion":
+                        if (posicionF != "")
+                        {
+                            return View(Data.Instance.Jugadores.Where(b => b.posicion == posicionF));
+                        }
+                        if (collection["posicionfilter"].Equals(""))
+                        {
+                            ViewBag.Message = string.Format("No se ha ingresado un parametro de busqueda");
+                            return View(Data.Instance.Jugadores);
+                        }
+                        break;
+                    case "Buscar por Salario Mayor":
+                        if (salarioF != "")
+                        {
+                            return View(Data.Instance.Jugadores.Where(c => c.salario_base > Convert.ToDouble(salarioF)));
+                        }
+                        if (collection["salariofilter"].Equals(""))
+                        {
+                            ViewBag.Message = string.Format("No se ha ingresado un parametro de busqueda");
+                            return View(Data.Instance.Jugadores);
+                        }
+                        break;
+                    case "Buscar por Salario Menor":
+                        if (salarioF != "")
+                        {
+                            return View(Data.Instance.Jugadores.Where(d => d.salario_base < Convert.ToDouble(salarioF)));
+                        }
+                        if (collection["salariofilter"].Equals(""))
+                        {
+                            ViewBag.Message = string.Format("No se ha ingresado un parametro de busqueda");
+                            return View(Data.Instance.Jugadores);
+                        }
+                        break;
+                    case "Buscar por Salario Igual":
+                        if (salarioF != "")
+                        {
+                            return View(Data.Instance.Jugadores.Where(f => f.salario_base == Convert.ToDouble(salarioF)));
+                        }
+                        if (collection["salariofilter"].Equals(""))
+                        {
+                            ViewBag.Message = string.Format("No se ha ingresado un parametro de busqueda");
+                            return View(Data.Instance.Jugadores);
+                        }
+                        break;
+                }
+                return RedirectToAction("Search");
             }
             catch
             {
