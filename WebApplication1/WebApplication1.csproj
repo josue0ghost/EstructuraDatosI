@@ -194,6 +194,7 @@
     <Content Include="Views\Jugador\Create.cshtml" />
     <Content Include="Views\Jugador\UploadFile.cshtml" />
     <Content Include="Views\Jugador\UploadFileDelete.cshtml" />
+    <Content Include="Views\Jugador\Home.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
