@@ -213,11 +213,12 @@ namespace WebApplication1.Controllers
                         ReadedLines.RemoveAt(i);
 
                 foreach (var item in ReadedLines)
-                {   
-                    var jgdr = Data.Instance.Jugadores.Find(jug => jug.club==item[0] && jug.apellido==item[1] && 
+                {
+
+                    var jgdr = Data.Instance.Jugadores.Find(jug => jug.club == item[0] && jug.apellido == item[1] && 
                                                             jug.nombre==item[2] && jug.posicion==item[3] &&
-                                                            jug.salario_base.Equals(item[4]) && 
-                                                            jug.compensacion_garantizada.Equals(item[5]));
+                                                            jug.salario_base.Equals(Convert.ToDouble(item[4])) && 
+                                                            jug.compensacion_garantizada.Equals(Convert.ToDouble(item[5])));
                     Data.Instance.Jugadores.Remove(jgdr);                    
                 }
 
