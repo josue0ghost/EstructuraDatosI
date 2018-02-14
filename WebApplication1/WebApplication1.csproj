@@ -199,6 +199,13 @@
     <Content Include="Views\Jugador\Delete.cshtml" />
     <Content Include="Views\Jugador\Details.cshtml" />
     <Content Include="Views\Jugador\Search.cshtml" />
+    <Content Include="Views\Jugador\DetailsAL.cshtml" />
+    <Content Include="Views\Jugador\CreateAL.cshtml" />
+    <Content Include="Views\Jugador\EditAL.cshtml" />
+    <Content Include="Views\Jugador\DeleteAL.cshtml" />
+    <Content Include="Views\Jugador\SearchAL.cshtml" />
+    <Content Include="Views\Jugador\UploadFileAL.cshtml" />
+    <Content Include="Views\Jugador\IndexAL.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

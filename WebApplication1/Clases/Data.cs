@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using WebApplication1.Models;
+using EstructurasDeDatosLineales;
 
 namespace WebApplication1.Clases
 {
@@ -19,5 +20,7 @@ namespace WebApplication1.Clases
         }
 
         public List<Jugador> Jugadores = new List<Jugador>();
+
+        public Lista<Jugador> lJugadores = new Lista<Jugador>();
     }
 }

@@ -1,0 +1,71 @@
+﻿@model WebApplication1.Models.Jugador
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Jugador</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.nombre)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.nombre)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.apellido)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.apellido)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.posicion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.posicion)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.club)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.club)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.salario_base)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.salario_base)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.compensacion_garantizada)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.compensacion_garantizada)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "IndexAL")
+        </div>
+    }
+</div>

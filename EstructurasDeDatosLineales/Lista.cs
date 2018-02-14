@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace EstructurasDeDatosLineales
 {
-    public class Nodo<T>
+    public class Nodo<T> 
     {
         public T value;
         public Nodo<T> next;
     }
 
-    public class Lista<T>
+    public class Lista<T> 
     {
         public Nodo<T> First;
         int Size;
@@ -128,7 +129,7 @@ namespace EstructurasDeDatosLineales
             return this.IndexOf(dato) >= 0;
         }
 
-        public object Obtener(int Indice)
+        public Nodo<T> Obtener(int Indice)
         {
             if (Indice < 0)
                 throw new ArgumentOutOfRangeException("Indice: " + Indice);
@@ -144,12 +145,37 @@ namespace EstructurasDeDatosLineales
             for (int i = 0; i < Indice; i++)
                 Actual = Actual.next;
             
-            return Actual.value;
+            return Actual;
         }
 
         public object this[int Indice]
         {
             get { return this.Obtener(Indice); }
+        }
+
+        public Lista<T> Where(Func<T, bool> delegado)
+        {
+            var filtered = new Lista<T>();
+            var current = First;
+            if (delegado.Invoke(current.value))
+            {
+                filtered.Insertar(current.value);
+                current = current.next;
+            }
+            return new Lista<T>();
+        }
+
+        public Nodo<T> Find(object dato)
+        {
+            Nodo<T> nActual = this.First;
+            while (nActual.next != null)
+            {
+                if (nActual.value.Equals(dato))
+                {
+                    return nActual;
+                }
+            }
+            return null;
         }
     }
 }

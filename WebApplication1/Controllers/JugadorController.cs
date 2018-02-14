@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using WebApplication1.Clases;
 using WebApplication1.Models;
+using EstructurasDeDatosLineales;
 
 namespace WebApplication1.Controllers
 {
@@ -16,11 +17,15 @@ namespace WebApplication1.Controllers
         Archivo archivo = new Archivo();
         Methods method = new Methods();
 
-        /*public List<Jugador> listado = new List<Jugador> {
-            new Jugador{ id = 1, nombre = ""}
-        };*/
+        #region C#List
+
         public ActionResult Home()
         {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+            stopwatch.Stop();
+            TimeSpan ts = stopwatch.Elapsed;
+            Log.SendToLog("Opening Home view", ts);
             return View();
         }
 
@@ -296,6 +301,11 @@ namespace WebApplication1.Controllers
         [HttpGet]
         public ActionResult UploadFile()
         {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+            stopwatch.Stop();
+            TimeSpan ts = stopwatch.Elapsed;
+            Log.SendToLog("Opening UploadFile view", ts);
             return View();
         }
 
@@ -303,6 +313,8 @@ namespace WebApplication1.Controllers
         [HttpPost]
         public ActionResult UploadFile(HttpPostedFileBase file)
         {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
             
             List<string[]> ReadedLines = new List<string[]>();
             try
@@ -317,16 +329,25 @@ namespace WebApplication1.Controllers
                     file.SaveAs(path);
 
                     ReadedLines = archivo.Lectura(path);
+
+                    method.DeleteInnecesaryLine(ReadedLines);
+                    method.AddToList(ReadedLines, true);
                 }
 
-                method.DeleteInnecesaryLine(ReadedLines);
-                method.AddToList(ReadedLines);
-             
+                stopwatch.Stop();
+                TimeSpan ts = stopwatch.Elapsed;
+                Log.SendToLog("Reading uploaded file and adding new players to Data.Instance.Jugadores from UploadFile view", ts);
+
                 return RedirectToAction("Index");
             }
             catch
             {
                 ViewBag.Message = "Error al subir el archivo";
+
+                stopwatch.Stop();
+                TimeSpan ts = stopwatch.Elapsed;
+                Log.SendToLog("Showing error at upload file from UploadFile view", ts);
+
                 return View();
             }
         }
@@ -335,6 +356,11 @@ namespace WebApplication1.Controllers
         [HttpGet]
         public ActionResult UploadFileDelete()
         {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+            stopwatch.Stop();
+            TimeSpan ts = stopwatch.Elapsed;
+            Log.SendToLog("Opening UploadFile view", ts);
             return View();
         }
 
@@ -342,6 +368,8 @@ namespace WebApplication1.Controllers
         [HttpPost]
         public ActionResult UploadFileDelete(HttpPostedFileBase file)
         {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
             List<string[]> ReadedLines = new List<string[]>();
             try
             {
@@ -355,19 +383,404 @@ namespace WebApplication1.Controllers
                     file.SaveAs(path);
 
                     ReadedLines = archivo.Lectura(path);
+
+                    method.DeleteInnecesaryLine(ReadedLines);
+                    method.DeleteFromList(ReadedLines, true);
                 }
 
-                method.DeleteInnecesaryLine(ReadedLines);
-                method.DeleteFromList(ReadedLines);                
+                stopwatch.Stop();
+                TimeSpan ts = stopwatch.Elapsed;
+                Log.SendToLog("Reading uploaded file and removing players from Data.Instance.Jugadores from UploadFileDelete view", ts);
+                return RedirectToAction("Index");
+            }
+            catch
+            {
+                stopwatch.Stop();
+                TimeSpan ts = stopwatch.Elapsed;
+                Log.SendToLog("Showing error at upload file from UploadFileDelete view", ts);
+                ViewBag.Message = "Error al subir el archivo";
+                return View();
+            }
+        }
+
+        #endregion
+
+        #region Artesanal List
+        // GET: Jugador
+        public ActionResult IndexAL()
+        {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+            stopwatch.Stop();
+            TimeSpan ts = stopwatch.Elapsed;
+            Log.SendToLog("Opening Index view and showing items from Data.Instance.lJugadores", ts);
+            return View(Data.Instance.lJugadores);
+            //Data.Instance.Jugadores
+        }
+
+        // GET: Jugador/Details/5
+        public ActionResult DetailsAL(int id)
+        {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+            var jgd = Data.Instance.lJugadores.Where(x => x.id == id);
+            stopwatch.Stop();
+            TimeSpan ts = stopwatch.Elapsed;
+            Log.SendToLog("Opening Details view and showing details from item id = " + id + " from Data.Instance.lJugador", ts);
+            return View(jgd);
+        }
+
+        // GET: Jugador/Create
+        public ActionResult CreateAL()
+        {
+            return View();
+        }
+
+        // POST: Jugador/Create
+        [HttpPost]
+        public ActionResult CreateAL(FormCollection collection)
+        {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+            try
+            {
+                // TODO: Add insert logic here
+                Data.Instance.lJugadores.Insertar(new Jugador
+                {
+                    id = Data.Instance.lJugadores.Count,
+                    nombre = collection["Nombre"],
+                    apellido = collection["Apellido"],
+                    posicion = collection["Posicion"],
+                    club = collection["club"],
+                    salario_base = Convert.ToDouble(collection["Salario_Base"]),
+                    compensacion_garantizada = Convert.ToDouble(collection["Compensacion_Garantizada"])
+                });
+                stopwatch.Stop();
+                TimeSpan ts = stopwatch.Elapsed;
+                Log.SendToLog("Adding new player to Data.Instance.lJugador from Create view", ts);
+                return RedirectToAction("IndexAL");
+            }
+            catch
+            {
+                return View();
+            }
+
+        }
+
+        // GET: Jugador/Edit/5
+        public ActionResult EditAL(int id)
+        {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+            var jgd = Data.Instance.lJugadores.Where(x => x.id == id);
+            stopwatch.Stop();
+            TimeSpan ts = stopwatch.Elapsed;
+            Log.SendToLog("Opening Edit view and showing de values if item id = " + id + " from Data.Instance.lJugador", ts);
+            return View(jgd);
+        }
+
+        // POST: Jugador/Edit/5
+        [HttpPost]
+        public ActionResult EditAL(int id, FormCollection collection)
+        {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+            try
+            {
+                Data.Instance.lJugadores.Obtener(id).value.nombre = collection["Nombre"];
+                Data.Instance.lJugadores.Obtener(id).value.apellido = collection["Apellido"];
+                Data.Instance.lJugadores.Obtener(id).value.posicion = collection["Posicion"];
+                Data.Instance.lJugadores.Obtener(id).value.club = collection["Club"];
+                Data.Instance.lJugadores.Obtener(id).value.salario_base = Convert.ToDouble(collection["Salario_Base"]);
+                Data.Instance.lJugadores.Obtener(id).value.compensacion_garantizada = Convert.ToDouble(collection["Compensacion_Garantizada"]);
+                stopwatch.Stop();
+                TimeSpan ts = stopwatch.Elapsed;
+                Log.SendToLog("Editing values from item id = " + id + " from Data.Instance.lJugador", ts);
+                return RedirectToAction("IndexAL");
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+        // GET: Jugador/Delete/5
+        public ActionResult DeleteAL(int id)
+        {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+            var jgd = Data.Instance.lJugadores.Where(x => x.id == id);
+            stopwatch.Stop();
+            TimeSpan ts = stopwatch.Elapsed;
+            Log.SendToLog("Opening Delete view and showing values from item id = " + id + " from Data.Instance.lJugador to delete them", ts);
+            return View(jgd);
+        }
+
+        // POST: Jugador/Delete/5
+        [HttpPost]
+        public ActionResult DeleteAL(int id, FormCollection collection)
+        {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+            try
+            {
+                // TODO: Add delete logic here
+                Data.Instance.lJugadores.Eliminar(id);
+                stopwatch.Stop();
+                TimeSpan ts = stopwatch.Elapsed;
+                Log.SendToLog("Deleting values from item id = " + id + " from Data.Instance.lJugador", ts);
+                return RedirectToAction("IndexAL");
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+        //public static List<Jugador> temp = Data.Instance.Jugadores;
+        public ActionResult SearchAL()
+        {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+            stopwatch.Stop();
+            TimeSpan ts = stopwatch.Elapsed;
+            Log.SendToLog("Opening Search view and showing items from Data.Instance.lJugador ", ts);
+            return View(Data.Instance.lJugadores);
+        }
+
+        [HttpPost]
+        public ActionResult SearchAL(FormCollection collection, string nameButton)
+        {
+            Stopwatch stopwatch = new Stopwatch();
+            try
+            {
+                // TODO: Add delete logic here
+                var nombreF = collection["nombrefilter"];
+                var posicionF = collection["posicionfilter"];
+                var apellidoF = collection["apellidofilter"];
+                var salarioF = collection["salariofilter"];
+                switch (nameButton)
+                {
+                    case "Buscar por Nombre":
+                        stopwatch.Start();
+                        if (nombreF != "")
+                        {
+                            stopwatch.Stop();
+                            TimeSpan ts = stopwatch.Elapsed;
+                            Log.SendToLog("Showing items from Data.Instance.lJugador in Search view where their name is " + nombreF, ts);
+                            return View(Data.Instance.lJugadores.Where(x => x.nombre == nombreF));
+                        }
+                        else
+                        {
+                            ViewBag.Message = string.Format("No se ha ingresado un parametro de busqueda");
+                            stopwatch.Stop();
+                            TimeSpan ts = stopwatch.Elapsed;
+                            Log.SendToLog("Showing items from Data.Instance.lJugador in Search view", ts);
+                            return View(Data.Instance.lJugadores);
+
+                        }
+                    case "Buscar por Apellido":
+                        stopwatch.Start();
+                        if (apellidoF != "")
+                        {
+                            stopwatch.Stop();
+                            TimeSpan ts = stopwatch.Elapsed;
+                            Log.SendToLog("Showing items from Data.Instance.lJugador in Search view where their last name is " + apellidoF, ts);
+                            return View(Data.Instance.lJugadores.Where(a => a.apellido == apellidoF));
+                        }
+                        else
+                        {
+                            ViewBag.Message = string.Format("No se ha ingresado un parametro de busqueda");
+                            stopwatch.Stop();
+                            TimeSpan ts = stopwatch.Elapsed;
+                            Log.SendToLog("Showing items from Data.Instance.lJugador in Search view", ts);
+                            return View(Data.Instance.lJugadores);
+                        }
+                    case "Buscar por Posicion":
+                        stopwatch.Start();
+                        if (posicionF != "")
+                        {
+                            stopwatch.Stop();
+                            TimeSpan ts = stopwatch.Elapsed;
+                            Log.SendToLog("Showing items from Data.Instance.lJugador in Search view where their position is " + posicionF, ts);
+                            return View(Data.Instance.lJugadores.Where(b => b.posicion == posicionF));
+                        }
+                        else
+                        {
+                            ViewBag.Message = string.Format("No se ha ingresado un parametro de busqueda");
+                            stopwatch.Stop();
+                            TimeSpan ts = stopwatch.Elapsed;
+                            Log.SendToLog("Showing items from Data.Instance.lJugador in Search view", ts);
+                            return View(Data.Instance.lJugadores);
+                        }
+                    case "Buscar por Salario Mayor":
+                        stopwatch.Start();
+                        if (salarioF != "")
+                        {
+                            stopwatch.Stop();
+                            TimeSpan ts = stopwatch.Elapsed;
+                            Log.SendToLog("Showing items from Data.Instance.lJugador in Search view where their salary is greater than" + salarioF, ts);
+                            return View(Data.Instance.lJugadores.Where(c => c.salario_base > Convert.ToDouble(salarioF)));
+                        }
+                        else
+                        {
+                            ViewBag.Message = string.Format("No se ha ingresado un parametro de busqueda");
+                            stopwatch.Stop();
+                            TimeSpan ts = stopwatch.Elapsed;
+                            Log.SendToLog("Showing items from Data.Instance.lJugador in Search view", ts);
+                            return View(Data.Instance.lJugadores);
+                        }
+                    case "Buscar por Salario Menor":
+                        stopwatch.Start();
+                        if (salarioF != "")
+                        {
+                            stopwatch.Stop();
+                            TimeSpan ts = stopwatch.Elapsed;
+                            Log.SendToLog("Showing items from Data.Instance.lJugador in Search view where their salary is less than " + salarioF, ts);
+                            return View(Data.Instance.lJugadores.Where(d => d.salario_base < Convert.ToDouble(salarioF)));
+                        }
+                        else
+                        {
+                            ViewBag.Message = string.Format("No se ha ingresado un parametro de busqueda");
+                            stopwatch.Stop();
+                            TimeSpan ts = stopwatch.Elapsed;
+                            Log.SendToLog("Showing items from Data.Instance.lJugador in Search view", ts);
+                            return View(Data.Instance.lJugadores);
+                        }
+                    case "Buscar por Salario Igual":
+                        stopwatch.Start();
+                        if (salarioF != "")
+                        {
+                            stopwatch.Stop();
+                            TimeSpan ts = stopwatch.Elapsed;
+                            Log.SendToLog("Showing items from Data.Instance.lJugador in Search view where their salary is " + salarioF, ts);
+                            return View(Data.Instance.lJugadores.Where(f => f.salario_base == Convert.ToDouble(salarioF)));
+                        }
+                        if (collection["salariofilter"].Equals(""))
+                        {
+                            ViewBag.Message = string.Format("No se ha ingresado un parametro de busqueda");
+                            stopwatch.Stop();
+                            TimeSpan ts = stopwatch.Elapsed;
+                            Log.SendToLog("Showing items from Data.Instance.lJugador in Search view", ts);
+                            return View(Data.Instance.lJugadores);
+                        }
+                        break;
+                }
+                return RedirectToAction("Search");
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+        // GET: Jugador/UploadFile
+        [HttpGet]
+        public ActionResult UploadFileAL()
+        {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+            stopwatch.Stop();
+            TimeSpan ts = stopwatch.Elapsed;
+            Log.SendToLog("Opening UploadFile view", ts);
+            return View();
+        }
+
+        // POST: Jugador/UploadFile
+        [HttpPost]
+        public ActionResult UploadFileAL(HttpPostedFileBase file)
+        {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+
+            List<string[]> ReadedLines = new List<string[]>();
+            try
+            {
+                if (!file.FileName.EndsWith(".csv"))
+                    return View();
+
+                if (file.ContentLength > 0)
+                {
+                    string fileName = Path.GetFileName(file.FileName);
+                    string path = Path.Combine(Server.MapPath("~/UploadedFiles"), fileName);
+                    file.SaveAs(path);
+
+                    ReadedLines = archivo.Lectura(path);
+
+                    method.DeleteInnecesaryLine(ReadedLines);
+                    method.AddToList(ReadedLines, false);
+                }
+
+                stopwatch.Stop();
+                TimeSpan ts = stopwatch.Elapsed;
+                Log.SendToLog("Reading uploaded file and adding new players to Data.Instance.lJugador from UploadFile view", ts);
 
                 return RedirectToAction("Index");
             }
             catch
             {
                 ViewBag.Message = "Error al subir el archivo";
+
+                stopwatch.Stop();
+                TimeSpan ts = stopwatch.Elapsed;
+                Log.SendToLog("Showing error at upload file from UploadFile view", ts);
+
                 return View();
             }
         }
+
+        // GET: Jugador/UploadFileDelete
+        [HttpGet]
+        public ActionResult UploadFileDeleteAL()
+        {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+            stopwatch.Stop();
+            TimeSpan ts = stopwatch.Elapsed;
+            Log.SendToLog("Opening UploadFile view", ts);
+            return View();
+        }
+
+        // POST: Jugador/UploadFileDelete
+        [HttpPost]
+        public ActionResult UploadFileDeleteAL(HttpPostedFileBase file)
+        {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+            List<string[]> ReadedLines = new List<string[]>();
+            try
+            {
+                if (!file.FileName.EndsWith(".csv"))
+                    return View();
+
+                if (file.ContentLength > 0)
+                {
+                    string fileName = Path.GetFileName(file.FileName);
+                    string path = Path.Combine(Server.MapPath("~/UploadedFiles"), fileName);
+                    file.SaveAs(path);
+
+                    ReadedLines = archivo.Lectura(path);
+
+                    method.DeleteInnecesaryLine(ReadedLines);
+                    method.DeleteFromList(ReadedLines, false);
+                }
+
+                stopwatch.Stop();
+                TimeSpan ts = stopwatch.Elapsed;
+                Log.SendToLog("Reading uploaded file and removing players from Data.Instance.lJugadores from UploadFileDeleteAL view", ts);
+                return RedirectToAction("IndexAL");
+            }
+            catch
+            {
+                stopwatch.Stop();
+                TimeSpan ts = stopwatch.Elapsed;
+                Log.SendToLog("Showing error at upload file from UploadFileDeleteAL view", ts);
+                ViewBag.Message = "Error al subir el archivo";
+                return View();
+            }
+        }
+
+        #endregion
     }
 
     class Methods : Controller
@@ -385,32 +798,65 @@ namespace WebApplication1.Controllers
                     ReadedLines.RemoveAt(i);
         }
 
-        public void AddToList(List<string[]> ReadedLines)
+        public void AddToList(List<string[]> ReadedLines, bool List) //true C#List - false Artesanal List
         {
             foreach (var item in ReadedLines)
             {
-                Data.Instance.Jugadores.Add(new Jugador
+                if (List)
                 {
-                    id = Data.Instance.Jugadores.Count,
-                    club = item[0],
-                    apellido = item[1],
-                    nombre = item[2],
-                    posicion = item[3],
-                    salario_base = Convert.ToDouble(item[4]),
-                    compensacion_garantizada = Convert.ToDouble(item[5])
-                });
+                    Data.Instance.Jugadores.Add(new Jugador
+                    {
+                        id = Data.Instance.Jugadores.Count,
+                        club = item[0],
+                        apellido = item[1],
+                        nombre = item[2],
+                        posicion = item[3],
+                        salario_base = Convert.ToDouble(item[4]),
+                        compensacion_garantizada = Convert.ToDouble(item[5])
+                    });
+                }
+                else
+                {
+                    Data.Instance.lJugadores.Insertar(new Jugador
+                    {
+                        id = Data.Instance.lJugadores.Count,
+                        club = item[0],
+                        apellido = item[1],
+                        nombre = item[2],
+                        posicion = item[3],
+                        salario_base = Convert.ToDouble(item[4]),
+                        compensacion_garantizada = Convert.ToDouble(item[5])
+                    });
+                }
             }
         }
 
-        public void DeleteFromList(List<string[]> ReadedLines)
+        public void DeleteFromList(List<string[]> ReadedLines, bool List) //true C#List - false Artesanal List
         {
             foreach (var item in ReadedLines)
             {
-                var jgdr = Data.Instance.Jugadores.Find(jug => jug.club == item[0] && jug.apellido == item[1] &&
+                if (List)
+                {
+                    var jgdr = Data.Instance.Jugadores.Find(jug => jug.club == item[0] && jug.apellido == item[1] &&
                                                         jug.nombre == item[2] && jug.posicion == item[3] &&
                                                         jug.salario_base.Equals(Convert.ToDouble(item[4])) &&
                                                         jug.compensacion_garantizada.Equals(Convert.ToDouble(item[5])));
-                Data.Instance.Jugadores.Remove(jgdr);
+                    Data.Instance.Jugadores.Remove(jgdr);
+                }
+                else
+                {
+                    Jugador jgdr = new Jugador
+                    {
+                        club = item[0],
+                        apellido = item[1],
+                        nombre = item[2],
+                        posicion = item[3],
+                        salario_base = Convert.ToDouble(item[4]),
+                        compensacion_garantizada = Convert.ToDouble(item[5])
+                    };
+                    var j = Data.Instance.lJugadores.Find(jgdr);
+                    Data.Instance.lJugadores.Eliminar(j.value.id);
+                }         
             }
         }
     }
@@ -438,16 +884,6 @@ namespace WebApplication1.Controllers
             }
             lSLineas.Clear();
             return listItems;
-        }
-
-        private void EscrituraArchivo(string sRuta, List<string> lSDatos)
-        {
-            StreamWriter swEscritor = new StreamWriter(sRuta, false, Encoding.Default);
-            foreach (string slinea in lSDatos)
-            {
-                swEscritor.WriteLine(slinea);
-            }
-            swEscritor.Close();
         }
     }
 }
