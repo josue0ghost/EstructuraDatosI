@@ -1,0 +1,125 @@
+
+Log Entry : 18:00:44 martes, 13 de febrero de 2018
+  :
+Event:Opening Index view and showing items from Data.Instance.Jugadores     Duration:00:00:00.0000016
+-------------------------------
+
+Log Entry : 18:03:23 martes, 13 de febrero de 2018
+  :
+Event:Opening Index view and showing items from Data.Instance.Jugadores     Duration:00:00:00.0000012
+-------------------------------
+
+Log Entry : 18:03:59 martes, 13 de febrero de 2018
+  :
+Event:Opening Index view and showing items from Data.Instance.Jugadores     Duration:00:00:00.0000008
+-------------------------------
+
+Log Entry : 18:04:21 martes, 13 de febrero de 2018
+  :
+Event:Opening Edit view and showing de values if item id = 0 from Data.Instance.Jugadores     Duration:00:00:00.0002888
+-------------------------------
+
+Log Entry : 18:04:31 martes, 13 de febrero de 2018
+  :
+Event:Editing values from item id = 0 from Data.Instance.Jugadores     Duration:00:00:00.0000344
+-------------------------------
+
+Log Entry : 18:04:31 martes, 13 de febrero de 2018
+  :
+Event:Opening Index view and showing items from Data.Instance.Jugadores     Duration:00:00:00.0000012
+-------------------------------
+
+Log Entry : 18:04:37 martes, 13 de febrero de 2018
+  :
+Event:Opening Details view and showing details from item id = 3 from list Data.Instance.Jugadores     Duration:00:00:00.0001764
+-------------------------------
+
+Log Entry : 18:04:40 martes, 13 de febrero de 2018
+  :
+Event:Opening Index view and showing items from Data.Instance.Jugadores     Duration:00:00:00.0000024
+-------------------------------
+
+Log Entry : 18:04:43 martes, 13 de febrero de 2018
+  :
+Event:Opening Delete view and showing values from item id = 3 from Data.Instance.Jugadores to delete them     Duration:00:00:00.0001206
+-------------------------------
+
+Log Entry : 18:04:46 martes, 13 de febrero de 2018
+  :
+Event:Deleting values from item id = 3 from Data.Instance.Jugadores     Duration:00:00:00.0000020
+-------------------------------
+
+Log Entry : 18:04:46 martes, 13 de febrero de 2018
+  :
+Event:Opening Index view and showing items from Data.Instance.Jugadores     Duration:00:00:00.0000032
+-------------------------------
+
+Log Entry : 18:04:51 martes, 13 de febrero de 2018
+  :
+Event:Opening Search view and showing items from Data.Instance.Jugadores      Duration:00:00:00.0000016
+-------------------------------
+
+Log Entry : 18:04:57 martes, 13 de febrero de 2018
+  :
+Event:Showing items from Data.Instance.Jugadores in Search view where their position is M     Duration:00:00:00.0000016
+-------------------------------
+
+Log Entry : 18:05:02 martes, 13 de febrero de 2018
+  :
+Event:Showing items from Data.Instance.Jugadores in Search view where their position is F     Duration:00:00:00.0000020
+-------------------------------
+
+Log Entry : 18:05:14 martes, 13 de febrero de 2018
+  :
+Event:Opening Index view and showing items from Data.Instance.Jugadores     Duration:00:00:00.0000020
+-------------------------------
+
+Log Entry : 18:05:19 martes, 13 de febrero de 2018
+  :
+Event:Opening Search view and showing items from Data.Instance.Jugadores      Duration:00:00:00.0000020
+-------------------------------
+
+Log Entry : 18:05:51 martes, 13 de febrero de 2018
+  :
+Event:Showing items from Data.Instance.Jugadores in Search view where their salary is greater than40000     Duration:00:00:00.0000012
+-------------------------------
+
+Log Entry : 18:05:58 martes, 13 de febrero de 2018
+  :
+Event:Showing items from Data.Instance.Jugadores in Search view where their salary is less than 40000     Duration:00:00:00.0000012
+-------------------------------
+
+Log Entry : 18:06:03 martes, 13 de febrero de 2018
+  :
+Event:Showing items from Data.Instance.Jugadores in Search view where their salary is 40000     Duration:00:00:00.0000012
+-------------------------------
+
+Log Entry : 18:06:07 martes, 13 de febrero de 2018
+  :
+Event:Opening Index view and showing items from Data.Instance.Jugadores     Duration:00:00:00.0000012
+-------------------------------
+
+Log Entry : 18:24:45 martes, 13 de febrero de 2018
+  :
+Event:Opening Index view and showing items from Data.Instance.Jugadores     Duration:00:00:00.0000016
+-------------------------------
+
+Log Entry : 18:25:00 martes, 13 de febrero de 2018
+  :
+Event:Opening Index view and showing items from Data.Instance.Jugadores     Duration:00:00:00.0000012
+-------------------------------
+
+Log Entry : 18:25:11 martes, 13 de febrero de 2018
+  :
+Event:Opening Index view and showing items from Data.Instance.Jugadores     Duration:00:00:00.0000020
+-------------------------------
+
+Log Entry : 18:25:26 martes, 13 de febrero de 2018
+  :
+Event:Opening Search view and showing items from Data.Instance.Jugadores      Duration:00:00:00.0000012
+-------------------------------
+
+Log Entry : 18:25:28 martes, 13 de febrero de 2018
+  :
+Event:Opening Index view and showing items from Data.Instance.Jugadores     Duration:00:00:00.0000012
+-------------------------------

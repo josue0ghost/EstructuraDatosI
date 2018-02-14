@@ -1,0 +1,104 @@
+﻿@model IEnumerable<WebApplication1.Models.Jugador>
+
+@{
+    /**/
+
+    ViewBag.Title = "Search";
+}
+
+<h2>Search</h2>
+
+@using (Html.BeginForm("Search"))
+{
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            @Html.TextBox("nombrefilter")
+            <input type="submit" value="Buscar por Nombre" class="btn btn-default" name="nameButton" />
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            @Html.TextBox("apellidofilter")
+            <input type="submit" value="Buscar por Apellido" class="btn btn-default" name="nameButton" />
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            @Html.TextBox("posicionfilter")
+            <input type="submit" value="Buscar por Posicion" class="btn btn-default" name="nameButton" />
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            @Html.TextBox("salariofilter")
+            <input type="submit" value="Buscar por Salario Mayor" class="btn btn-default" name="nameButton" />
+            <input type="submit" value="Buscar por Salario Menor" class="btn btn-default" name="nameButton" />
+            <input type="submit" value="Buscar por Salario Igual" class="btn btn-default" name="nameButton" />
+        </div>
+    </div>
+}
+@if (ViewBag.Message != null)
+{
+    <script type="text/javascript">
+            window.onload = function () {
+                alert("@ViewBag.Message");
+            };
+    </script>
+}
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.nombre)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.apellido)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.posicion)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.club)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.salario_base)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.compensacion_garantizada)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.nombre)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.apellido)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.posicion)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.club)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.salario_base)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.compensacion_garantizada)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.id }) |
+                @Html.ActionLink("Details", "Details", new { id = item.id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.id })
+            </td>
+        </tr>
+    }
+
+
+</table>
+<div>
+    @Html.ActionLink("Back to Main List", "Index")
+</div>
