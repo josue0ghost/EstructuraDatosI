@@ -13,7 +13,7 @@ namespace EstructurasDeDatosLineales
         public Nodo<T> next;
     }
 
-    public class Lista<T> 
+    public class Lista<T> : IEnumerable<T>
     {
         public Nodo<T> First;
         int Size;
@@ -176,6 +176,21 @@ namespace EstructurasDeDatosLineales
                 }
             }
             return null;
+        }
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            var node = First;
+            while (node != null)
+            {
+                yield return node.value;
+                node = node.next;
+            }
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
 }

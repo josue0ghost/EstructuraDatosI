@@ -14,10 +14,10 @@ namespace WebApplication1.Clases
 {
     public class Log
     {
-        static string filename = "Log.txt";
+        static string filename;
         public static void beginLog()
         {
-            filename = "Log" + DateTime.Now.ToShortTimeString() + ".txt";
+            Log.filename = "Log" + DateTime.Now.ToBinary() + ".txt";
         }
 
         public static void SendToLog(string logMessage, TimeSpan time)

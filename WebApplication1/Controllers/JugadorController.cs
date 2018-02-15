@@ -25,6 +25,7 @@ namespace WebApplication1.Controllers
             stopwatch.Start();
             stopwatch.Stop();
             TimeSpan ts = stopwatch.Elapsed;
+            Log.beginLog();
             Log.SendToLog("Opening Home view", ts);
             return View();
         }
