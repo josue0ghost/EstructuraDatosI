@@ -780,7 +780,7 @@ namespace WebApplication1.Controllers
             stopwatch.Start();
             stopwatch.Stop();
             TimeSpan ts = stopwatch.Elapsed;
-            Log.SendToLog("Opening UploadFile view", ts);
+            Log.SendToLog("Opening UploadFileDeleteAL view", ts);
             return View();
         }
 
@@ -813,7 +813,7 @@ namespace WebApplication1.Controllers
                 Log.SendToLog("Reading uploaded file and removing players from Data.Instance.lJugadores from UploadFileDeleteAL view", ts);
                 return RedirectToAction("IndexAL");
             }
-            catch
+            catch(Exception ex)
             {
                 stopwatch.Stop();
                 TimeSpan ts = stopwatch.Elapsed;
@@ -897,8 +897,20 @@ namespace WebApplication1.Controllers
                         salario_base = Convert.ToDouble(item[4]),
                         compensacion_garantizada = Convert.ToDouble(item[5])
                     };
-                    var j = Data.Instance.lJugadores.Find(jgdr);
-                    Data.Instance.lJugadores.Eliminar(j.value.id);
+                    var j = Data.Instance.lJugadores.Find(jug => jug.club == item[0] && jug.apellido == item[1] &&
+                                                        jug.nombre == item[2] && jug.posicion == item[3] &&
+                                                        jug.salario_base.Equals(Convert.ToDouble(item[4])) &&
+                                                        jug.compensacion_garantizada.Equals(Convert.ToDouble(item[5])));
+                    jgdr.id = j.First.value.id;
+
+                    for (int i = 0; i < Data.Instance.lJugadores.Count; i++)
+                    {
+                        var player = Data.Instance.lJugadores.ElementAt(i);
+                        if (player.id == jgdr.id)
+                        {
+                            Data.Instance.lJugadores.Eliminar(i);
+                        }
+                    }
                 }         
             }
         }

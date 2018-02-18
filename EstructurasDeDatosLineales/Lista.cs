@@ -88,15 +88,21 @@ namespace EstructurasDeDatosLineales
                 throw new ArgumentOutOfRangeException("Indice: " + Indice);
 
             if (Indice >= this.Size)
-                Indice = Size - 1;
+                Indice = this.Size - 1;
 
             if (First.next == null)
             {
                 First = null;
             }
-            else if (Indice <= Size)
+            else if (Indice == 0)
             {
-                Nodo<T> Final = First;
+                Nodo<T> Actual = this.First;
+                First = Actual.next;
+                Actual = null;
+            }
+            else if (Indice == Size)
+            {
+                Nodo<T> Final = this.First;
 
                 while (Final.next.next != null)
                     Final = Final.next;
@@ -105,8 +111,20 @@ namespace EstructurasDeDatosLineales
                 Final.next = null;
                 Elimina = null;
             }
+            else if (Indice < Size)
+            {
+                Nodo<T> Actual = this.First;
+                for (int i = 0; i < Indice - 1; i++)
+                {
+                    Actual = Actual.next;
+                }
+                Nodo<T> Elimina = Actual.next;
+                Actual.next = Actual.next.next;
+                Elimina = null;
+            }
 
-            Size--;
+
+            this.Size--;
         }
 
         public void Limpiar()
@@ -115,21 +133,33 @@ namespace EstructurasDeDatosLineales
             this.Size = 0;
         }
 
-        public int IndexOf(object dato)
+        public int IndexOf(T dato)
         {
             Nodo<T> Actual = this.First;
 
             for (int i = 0; i < this.Size; i++)
             {
                 if (Actual.value.Equals(dato))
+                {
                     return i;
-
+                }
                 Actual = Actual.next;
             }
             return -1;
         }
 
-        public bool Contiene(object dato)
+        public bool Remove(T item)
+        {
+            int Index = this.IndexOf(item);
+            if (Index >= 0)
+            {
+                this.Eliminar(Index);
+                return true;
+            }
+            return false;
+        }
+
+        public bool Contiene(T dato)
         {
             return this.IndexOf(dato) >= 0;
         }
@@ -173,19 +203,33 @@ namespace EstructurasDeDatosLineales
             return filtered;
         }
 
-        public Nodo<T> Find(object dato)
+        //public Nodo<T> Find(object dato)
+        //{
+        //    Nodo<T> nActual = this.First;
+        //    while (nActual.next != null)
+        //    {
+        //        if (true)
+        //        {
+        //            return nActual;
+        //        }
+        //        nActual = nActual.next;
+        //    }
+        //    return null;
+        //}
+        public Lista<T> Find(Func<T, bool> delegado)
         {
-            Nodo<T> nActual = this.First;
-            while (nActual.next != null)
+            var filtered = new Lista<T>();
+            var current = First;
+            while (current != null)
             {
-                if (nActual.value.Equals(dato))
+                if (delegado.Invoke(current.value))
                 {
-                    return nActual;
+                    filtered.Insertar(current.value);
                 }
+                current = current.next;
             }
-            return null;
+            return filtered;
         }
-
         public IEnumerator<T> GetEnumerator()
         {
             var node = First;

@@ -206,6 +206,7 @@
     <Content Include="Views\Jugador\SearchAL.cshtml" />
     <Content Include="Views\Jugador\UploadFileAL.cshtml" />
     <Content Include="Views\Jugador\IndexAL.cshtml" />
+    <Content Include="Views\Jugador\UploadFileDeleteAL.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
