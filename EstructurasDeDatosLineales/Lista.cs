@@ -46,7 +46,7 @@ namespace EstructurasDeDatosLineales
             return nTemp;
         }
 
-        public void Insertar(int Indice, object T)
+        public Nodo<T> Insertar(int Indice, T obj)
         {
             if (Indice < 0)
                 throw new ArgumentOutOfRangeException("Indice: " + Indice);
@@ -54,7 +54,10 @@ namespace EstructurasDeDatosLineales
             if (Indice > Size)
                 Indice = Size;
 
-            Nodo<T> NodoActual = new Nodo<T> { next = null };
+            Nodo<T> NodoActual = new Nodo<T> {
+                value = obj,
+                next = null
+            };
 
             if (this.Vacio || Indice == 0)
             {
@@ -70,6 +73,8 @@ namespace EstructurasDeDatosLineales
                 NodoFinal.next = NodoActual;
             }
             Size++;
+
+            return NodoActual;
         }
 
         public void Insertar(T dato)
