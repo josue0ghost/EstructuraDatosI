@@ -110,7 +110,7 @@ namespace WebApplication1.Controllers
             stopwatch.Start();
             try
             {
-                if((collection["Club"] == "") || (collection["Salario_Base"] == ""))
+                if ((collection["Club"] == "") || (collection["Salario_Base"] == ""))
                 {
                     var jgd = Data.Instance.Jugadores.Where(x => x.id == id).FirstOrDefault();
                     ViewBag.Message = string.Format("No puede dejar el parametro de club o salario base vacio");
@@ -334,11 +334,11 @@ namespace WebApplication1.Controllers
         {
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
-            
+
             List<string[]> ReadedLines = new List<string[]>();
             try
             {
-                if (!file.FileName.EndsWith(".csv"))                
+                if (!file.FileName.EndsWith(".csv"))
                     return View();
 
                 if (file.ContentLength > 0)
@@ -813,7 +813,7 @@ namespace WebApplication1.Controllers
                 Log.SendToLog("Reading uploaded file and removing players from Data.Instance.lJugadores from UploadFileDeleteAL view", ts);
                 return RedirectToAction("IndexAL");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 stopwatch.Stop();
                 TimeSpan ts = stopwatch.Elapsed;
@@ -911,7 +911,7 @@ namespace WebApplication1.Controllers
                             Data.Instance.lJugadores.Eliminar(i);
                         }
                     }
-                }         
+                }
             }
         }
     }

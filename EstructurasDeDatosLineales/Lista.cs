@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace EstructurasDeDatosLineales
 {
-    public class Nodo<T> 
+    public class Nodo<T>
     {
         public T value;
         public Nodo<T> next;
@@ -54,7 +54,8 @@ namespace EstructurasDeDatosLineales
             if (Indice > Size)
                 Indice = Size;
 
-            Nodo<T> NodoActual = new Nodo<T> {
+            Nodo<T> NodoActual = new Nodo<T>
+            {
                 value = obj,
                 next = null
             };
@@ -179,7 +180,7 @@ namespace EstructurasDeDatosLineales
 
             for (int i = 0; i < Indice; i++)
                 Actual = Actual.next;
-            
+
             return Actual;
         }
 
@@ -192,7 +193,7 @@ namespace EstructurasDeDatosLineales
         {
             var filtered = new Lista<T>();
             var current = First;
-            while(current != null)
+            while (current != null)
             {
                 if (delegado.Invoke(current.value))
                 {
