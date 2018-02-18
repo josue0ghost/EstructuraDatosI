@@ -667,7 +667,7 @@ namespace WebApplication1.Controllers
                         }
                         break;
                 }
-                return RedirectToAction("Search");
+                return RedirectToAction("SearchAL");
             }
             catch
             {
@@ -716,7 +716,7 @@ namespace WebApplication1.Controllers
                 TimeSpan ts = stopwatch.Elapsed;
                 Log.SendToLog("Reading uploaded file and adding new players to Data.Instance.lJugador from UploadFile view", ts);
 
-                return RedirectToAction("Index");
+                return RedirectToAction("IndexAL");
             }
             catch
             {
