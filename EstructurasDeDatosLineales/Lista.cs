@@ -94,7 +94,7 @@ namespace EstructurasDeDatosLineales
             {
                 First = null;
             }
-            else if (Indice >= Size)
+            else if (Indice <= Size)
             {
                 Nodo<T> Final = First;
 
@@ -162,12 +162,15 @@ namespace EstructurasDeDatosLineales
         {
             var filtered = new Lista<T>();
             var current = First;
-            if (delegado.Invoke(current.value))
+            while(current != null)
             {
-                filtered.Insertar(current.value);
+                if (delegado.Invoke(current.value))
+                {
+                    filtered.Insertar(current.value);
+                }
                 current = current.next;
             }
-            return new Lista<T>();
+            return filtered;
         }
 
         public Nodo<T> Find(object dato)

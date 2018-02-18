@@ -110,16 +110,28 @@ namespace WebApplication1.Controllers
             stopwatch.Start();
             try
             {
-                Data.Instance.Jugadores[id].nombre = collection["Nombre"];
-                Data.Instance.Jugadores[id].apellido = collection["Apellido"];
-                Data.Instance.Jugadores[id].posicion = collection["Posicion"];
-                Data.Instance.Jugadores[id].club = collection["Club"];
-                Data.Instance.Jugadores[id].salario_base = Convert.ToDouble(collection["Salario_Base"]);
-                Data.Instance.Jugadores[id].compensacion_garantizada = Convert.ToDouble(collection["Compensacion_Garantizada"]);
-                stopwatch.Stop();
-                TimeSpan ts = stopwatch.Elapsed;
-                Log.SendToLog("Editing values from item id = " + id + " from Data.Instance.Jugadores", ts);
-                return RedirectToAction("Index");
+                if((collection["Club"] == "") || (collection["Salario_Base"] == ""))
+                {
+                    var jgd = Data.Instance.Jugadores.Where(x => x.id == id).FirstOrDefault();
+                    ViewBag.Message = string.Format("No puede dejar el parametro de club o salario base vacio");
+                    stopwatch.Stop();
+                    TimeSpan ts = stopwatch.Elapsed;
+                    Log.SendToLog("Trying to edit values from item id = " + id + " from Data.Instance.Jugadores but failed", ts);
+                    return View(jgd);
+                }
+                else
+                {
+                    Data.Instance.Jugadores[id].nombre = collection["Nombre"];
+                    Data.Instance.Jugadores[id].apellido = collection["Apellido"];
+                    Data.Instance.Jugadores[id].posicion = collection["Posicion"];
+                    Data.Instance.Jugadores[id].club = collection["Club"];
+                    Data.Instance.Jugadores[id].salario_base = Convert.ToDouble(collection["Salario_Base"]);
+                    Data.Instance.Jugadores[id].compensacion_garantizada = Convert.ToDouble(collection["Compensacion_Garantizada"]);
+                    stopwatch.Stop();
+                    TimeSpan ts = stopwatch.Elapsed;
+                    Log.SendToLog("Editing values from item id = " + id + " from Data.Instance.Jugadores", ts);
+                    return RedirectToAction("Index");
+                }
             }
             catch
             {
@@ -288,6 +300,12 @@ namespace WebApplication1.Controllers
                             return View(Data.Instance.Jugadores);
                         }
                         break;
+                    case "Mostrar Lista Completa":
+                        stopwatch.Start();
+                        stopwatch.Stop();
+                        TimeSpan tst = stopwatch.Elapsed;
+                        Log.SendToLog("Showing items from Data.Instance.lJugador in Search view", tst);
+                        return View(Data.Instance.lJugadores);
                 }
                 return RedirectToAction("Search");
             }
@@ -428,7 +446,7 @@ namespace WebApplication1.Controllers
             stopwatch.Stop();
             TimeSpan ts = stopwatch.Elapsed;
             Log.SendToLog("Opening Details view and showing details from item id = " + id + " from Data.Instance.lJugador", ts);
-            return View(jgd);
+            return View(jgd.First.value);
         }
 
         // GET: Jugador/Create
@@ -477,7 +495,7 @@ namespace WebApplication1.Controllers
             stopwatch.Stop();
             TimeSpan ts = stopwatch.Elapsed;
             Log.SendToLog("Opening Edit view and showing de values if item id = " + id + " from Data.Instance.lJugador", ts);
-            return View(jgd);
+            return View(jgd.First.value);
         }
 
         // POST: Jugador/Edit/5
@@ -488,16 +506,28 @@ namespace WebApplication1.Controllers
             stopwatch.Start();
             try
             {
-                Data.Instance.lJugadores.Obtener(id).value.nombre = collection["Nombre"];
-                Data.Instance.lJugadores.Obtener(id).value.apellido = collection["Apellido"];
-                Data.Instance.lJugadores.Obtener(id).value.posicion = collection["Posicion"];
-                Data.Instance.lJugadores.Obtener(id).value.club = collection["Club"];
-                Data.Instance.lJugadores.Obtener(id).value.salario_base = Convert.ToDouble(collection["Salario_Base"]);
-                Data.Instance.lJugadores.Obtener(id).value.compensacion_garantizada = Convert.ToDouble(collection["Compensacion_Garantizada"]);
-                stopwatch.Stop();
-                TimeSpan ts = stopwatch.Elapsed;
-                Log.SendToLog("Editing values from item id = " + id + " from Data.Instance.lJugador", ts);
-                return RedirectToAction("IndexAL");
+                if ((collection["Club"] == "") || (collection["Salario_Base"] == ""))
+                {
+                    ViewBag.Message = string.Format("No puede dejar el parametro de club o salario base vacio");
+                    var jgd = Data.Instance.lJugadores.Where(x => x.id == id);
+                    stopwatch.Stop();
+                    TimeSpan ts = stopwatch.Elapsed;
+                    Log.SendToLog("Trying to edit values from item id = " + id + " from Data.Instance.lJugadores but failed", ts);
+                    return View(jgd.First.value);
+                }
+                else
+                {
+                    Data.Instance.lJugadores.Obtener(id).value.nombre = collection["Nombre"];
+                    Data.Instance.lJugadores.Obtener(id).value.apellido = collection["Apellido"];
+                    Data.Instance.lJugadores.Obtener(id).value.posicion = collection["Posicion"];
+                    Data.Instance.lJugadores.Obtener(id).value.club = collection["Club"];
+                    Data.Instance.lJugadores.Obtener(id).value.salario_base = Convert.ToDouble(collection["Salario_Base"]);
+                    Data.Instance.lJugadores.Obtener(id).value.compensacion_garantizada = Convert.ToDouble(collection["Compensacion_Garantizada"]);
+                    stopwatch.Stop();
+                    TimeSpan ts = stopwatch.Elapsed;
+                    Log.SendToLog("Editing values from item id = " + id + " from Data.Instance.lJugador", ts);
+                    return RedirectToAction("IndexAL");
+                }
             }
             catch
             {
@@ -514,7 +544,7 @@ namespace WebApplication1.Controllers
             stopwatch.Stop();
             TimeSpan ts = stopwatch.Elapsed;
             Log.SendToLog("Opening Delete view and showing values from item id = " + id + " from Data.Instance.lJugador to delete them", ts);
-            return View(jgd);
+            return View(jgd.First.value);
         }
 
         // POST: Jugador/Delete/5
@@ -566,10 +596,11 @@ namespace WebApplication1.Controllers
                         stopwatch.Start();
                         if (nombreF != "")
                         {
+                            var jgd = Data.Instance.lJugadores.Where(x => x.nombre == nombreF);
                             stopwatch.Stop();
                             TimeSpan ts = stopwatch.Elapsed;
                             Log.SendToLog("Showing items from Data.Instance.lJugador in Search view where their name is " + nombreF, ts);
-                            return View(Data.Instance.lJugadores.Where(x => x.nombre == nombreF));
+                            return View(jgd);
                         }
                         else
                         {
@@ -584,10 +615,11 @@ namespace WebApplication1.Controllers
                         stopwatch.Start();
                         if (apellidoF != "")
                         {
+                            var jgd = Data.Instance.lJugadores.Where(a => a.apellido == apellidoF);
                             stopwatch.Stop();
                             TimeSpan ts = stopwatch.Elapsed;
                             Log.SendToLog("Showing items from Data.Instance.lJugador in Search view where their last name is " + apellidoF, ts);
-                            return View(Data.Instance.lJugadores.Where(a => a.apellido == apellidoF));
+                            return View(jgd);
                         }
                         else
                         {
@@ -601,10 +633,11 @@ namespace WebApplication1.Controllers
                         stopwatch.Start();
                         if (posicionF != "")
                         {
+                            var jgd = Data.Instance.lJugadores.Where(b => b.posicion == posicionF);
                             stopwatch.Stop();
                             TimeSpan ts = stopwatch.Elapsed;
                             Log.SendToLog("Showing items from Data.Instance.lJugador in Search view where their position is " + posicionF, ts);
-                            return View(Data.Instance.lJugadores.Where(b => b.posicion == posicionF));
+                            return View(jgd);
                         }
                         else
                         {
@@ -618,10 +651,11 @@ namespace WebApplication1.Controllers
                         stopwatch.Start();
                         if (salarioF != "")
                         {
+                            var jgd = Data.Instance.lJugadores.Where(c => c.salario_base > Convert.ToDouble(salarioF));
                             stopwatch.Stop();
                             TimeSpan ts = stopwatch.Elapsed;
                             Log.SendToLog("Showing items from Data.Instance.lJugador in Search view where their salary is greater than" + salarioF, ts);
-                            return View(Data.Instance.lJugadores.Where(c => c.salario_base > Convert.ToDouble(salarioF)));
+                            return View(jgd);
                         }
                         else
                         {
@@ -635,10 +669,11 @@ namespace WebApplication1.Controllers
                         stopwatch.Start();
                         if (salarioF != "")
                         {
+                            var jgd = Data.Instance.lJugadores.Where(d => d.salario_base < Convert.ToDouble(salarioF));
                             stopwatch.Stop();
                             TimeSpan ts = stopwatch.Elapsed;
                             Log.SendToLog("Showing items from Data.Instance.lJugador in Search view where their salary is less than " + salarioF, ts);
-                            return View(Data.Instance.lJugadores.Where(d => d.salario_base < Convert.ToDouble(salarioF)));
+                            return View(jgd);
                         }
                         else
                         {
@@ -652,10 +687,11 @@ namespace WebApplication1.Controllers
                         stopwatch.Start();
                         if (salarioF != "")
                         {
+                            var jgd = Data.Instance.lJugadores.Where(f => f.salario_base == Convert.ToDouble(salarioF));
                             stopwatch.Stop();
                             TimeSpan ts = stopwatch.Elapsed;
                             Log.SendToLog("Showing items from Data.Instance.lJugador in Search view where their salary is " + salarioF, ts);
-                            return View(Data.Instance.lJugadores.Where(f => f.salario_base == Convert.ToDouble(salarioF)));
+                            return View(jgd);
                         }
                         if (collection["salariofilter"].Equals(""))
                         {
@@ -666,8 +702,14 @@ namespace WebApplication1.Controllers
                             return View(Data.Instance.lJugadores);
                         }
                         break;
+                    case "Mostrar Lista Completa":
+                        stopwatch.Start();
+                        stopwatch.Stop();
+                        TimeSpan tst = stopwatch.Elapsed;
+                        Log.SendToLog("Showing items from Data.Instance.lJugador in Search view", tst);
+                        return View(Data.Instance.lJugadores);
                 }
-                return RedirectToAction("SearchAL");
+                return RedirectToAction("IndexAL", Data.Instance.lJugadores);
             }
             catch
             {
