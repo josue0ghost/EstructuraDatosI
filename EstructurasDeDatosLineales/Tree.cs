@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EstructurasDeDatosLineales
 {
-    internal class BinaryTreeNode<T>
+    public class BinaryTreeNode<T>
     {
         public T Value { get; set; }
         public BinaryTreeNode<T> Left { get; set; }
@@ -26,7 +26,7 @@ namespace EstructurasDeDatosLineales
         public bool Full() { return Left != null && Right != null; } //Necesario?
     }
 
-    class Tree<T> where T : IComparable
+    public class Tree<T> where T : IComparable
     {
         public BinaryTreeNode<T> Root { get; set; }
 
