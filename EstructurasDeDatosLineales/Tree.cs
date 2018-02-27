@@ -212,48 +212,53 @@ namespace EstructurasDeDatosLineales
             return Root == null;
         }
 
-        public string InOrder()
-        {
-            string Content = string.Empty;
-            InOrder(Root, ref Content);
-            return Content;
-        }
 
-        private void InOrder(BinaryTreeNode<T> Root, ref string Content)
+        private void InOrder(BinaryTreeNode<T> Root, ref List<T> Elements)
         {
             if (Root != null)
-                InOrder(Root.Left, ref Content);
-                Content += Root.Value.ToString() + "\n";
-                InOrder(Root.Right, ref Content);
+            {
+                InOrder(Root.Left, ref Elements);
+                Elements.Add(Root.Value);
+                InOrder(Root.Right, ref Elements);
+            }
         }
 
-        public string PostOrder()
-        {
-            string Content = string.Empty;
-            PostOrder(Root, ref Content);
-            return Content;
-        }
-
-        private void PostOrder(BinaryTreeNode<T> Root, ref string Content)
+        private void PostOrder(BinaryTreeNode<T> Root, ref List<T> Elements)
         {
             if (Root != null)
-                PostOrder(Root.Left, ref Content);
-                PostOrder(Root.Right, ref Content);
-                Content += Root.Value.ToString() + "\n";
+            {
+                PostOrder(Root.Left, ref Elements);
+                PostOrder(Root.Right, ref Elements);
+                Elements.Add(Root.Value);
+            }
         }
 
-        public string PreOrder()
+        private void PreOrder(BinaryTreeNode<T> Root, ref List<T> Elements)
         {
-            string Content = string.Empty;
-            PreOrder(Root, ref Content);
-            return Content;
+            if (Root != null)
+            {
+                Elements.Add(Root.Value);
+                PreOrder(Root.Left, ref Elements);
+                PreOrder(Root.Right, ref Elements);
+            }
         }
 
-        private void PreOrder(BinaryTreeNode<T> Root, ref string Content)
+        public List<T> Orders(string Order)
         {
-            Content += Root.Value.ToString() + "\n";
-            PreOrder(Root.Left, ref Content);
-            PreOrder(Root.Right, ref Content);
+            List<T> Elements = new List<T>();
+            switch (Order)
+            {
+                case "PreOrder":
+                    PreOrder(Root, ref Elements);
+                    break;
+                case "InOrder":
+                    InOrder(Root, ref Elements);
+                    break;
+                case "PostOrder":
+                    PostOrder(Root, ref Elements);
+                    break;
+            }
+            return Elements;
         }
     }
 
